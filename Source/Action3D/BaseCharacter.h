@@ -2,22 +2,9 @@
 
 #pragma once
 
-#include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "Camera/CameraComponent.h"
-#include "Components/InputComponent.h"
-
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
-
-
-
-//class UCameraComponent;
-//class USpringArmComponent;
-//class UInputComponent;
-//class UCharacterMovementComponent;
-//class USkeletalMesh;
 
 UCLASS()
 class ABaseCharacter : public ACharacter
@@ -46,19 +33,26 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	
+	// ќбъ€вл€ем необходимые компоненты...
+
+	// ...перемещение персонажа...
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCharacterMovementComponent* BaseMovementComponent;
 
+	// ...камеру персонажа...
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* BaseCameraComponent;
 	
+	// ...локоть камеры персонажа...
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* BaseSpringArmComponent;
 
+	// ...прив€зку управлени€ персонажа.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UInputComponent* BaseInputComponent;
 
 private:
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pickup", meta = (AllowPrivateAccess = "true"))
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BaseBody", meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* BaseBodyMesh;*/
 };

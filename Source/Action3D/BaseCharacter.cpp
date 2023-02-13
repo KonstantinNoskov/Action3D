@@ -10,23 +10,28 @@
 ABaseCharacter::ABaseCharacter()
 {
 
-	/*BaseBodyMesh = CreateDefaultSubobject<UStaticMeshComponent>("PickupMesh");
+	/*BaseBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>("BaseBodyMesh");
 	RootComponent = BaseBodyMesh;*/
 
 	PrimaryActorTick.bCanEverTick = true;
 
-	bUseControllerRotationPitch = true;
-	bUseControllerRotationYaw = true;
-	bUseControllerRotationRoll = true;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Будет ли персонаж поворачиваться в направлении взгляда
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // задает скорость поворота персонажа по осям Y, Z и X
 	GetCharacterMovement()->JumpZVelocity = 600.f;
-	GetCharacterMovement()->AirControl = 0.2f;
+	GetCharacterMovement()->AirControl = 0.2f; // Коэффицент управляемости персонажа в прыжке/падении
 
+
+	// Создаем копию локтя камеры
 	BaseSpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("BaseCameraBoom");
+	// Крепим локоть камеры к корневому компоненту
 	BaseSpringArmComponent->SetupAttachment(RootComponent);
+	// Задаем длину локтя
 	BaseSpringArmComponent->TargetArmLength = 300.f;
+	
 	BaseSpringArmComponent->bUsePawnControlRotation = true;
 
 	BaseCameraComponent = CreateDefaultSubobject<UCameraComponent>("BaseFollowCamera");
@@ -45,7 +50,6 @@ void ABaseCharacter::BeginPlay()
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 ////////////////////////////////////
@@ -66,13 +70,14 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 }
 
 
-////////////////////////////////////
+/////////////////////////////////////
 ///  Base Controller Implementation
-////////////////////////////////////
+/////////////////////////////////////
 
+
+// Движение вперед/назад
 void ABaseCharacter::MoveForward(float AxisValue)
 {
-
 	if ((Controller != nullptr) && (AxisValue != 0.0f))
 	{
 		FRotator Rotation = Controller->GetControlRotation();
@@ -82,9 +87,9 @@ void ABaseCharacter::MoveForward(float AxisValue)
 
 		AddMovementInput(Direction, AxisValue);
 	}
-
 }
 
+// Движение вправо/влево
 void ABaseCharacter::MoveRight(float AxisValue)
 {
 	if ((Controller != nullptr) && (AxisValue != 0.0f))
@@ -96,5 +101,4 @@ void ABaseCharacter::MoveRight(float AxisValue)
 
 		AddMovementInput(Direction, AxisValue);
 	}
-
 }
