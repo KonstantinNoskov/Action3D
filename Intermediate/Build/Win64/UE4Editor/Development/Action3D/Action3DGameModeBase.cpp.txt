@@ -1,0 +1,7 @@
+E:\UE4\Projects\Action3D\Intermediate\Build\Win64\UE4Editor\Development\Action3D\Definitions.Action3D.h
+E:\UE4\Projects\Action3D\Source\Action3D\Action3DGameModeBase.h
+E:\UE4\UE_4.27\Engine\Source\Runtime\Engine\Classes\GameFramework/GameModeBase.h
+E:\UE4\UE_4.27\Engine\Source\Runtime\Engine\Classes\Engine/ServerStatReplicator.h
+E:\UE4\UE_4.27\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\ServerStatReplicator.generated.h
+E:\UE4\UE_4.27\Engine\Intermediate\Build\Win64\UE4Editor\Inc\Engine\GameModeBase.generated.h
+E:\UE4\Projects\Action3D\Intermediate\Build\Win64\UE4Editor\Inc\Action3D\Action3DGameModeBase.generated.h

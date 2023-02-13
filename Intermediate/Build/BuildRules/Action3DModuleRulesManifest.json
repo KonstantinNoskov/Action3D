@@ -1,0 +1,8 @@
+{
+	"SourceFiles": [
+		"E:\\UE4\\Projects\\Action3D\\Source\\Action3D\\Action3D.Build.cs",
+		"E:\\UE4\\Projects\\Action3D\\Source\\Action3D.Target.cs",
+		"E:\\UE4\\Projects\\Action3D\\Source\\Action3DEditor.Target.cs"
+	],
+	"EngineVersion": "4.27.2"
+}

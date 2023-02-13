@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "Action3D",
+			"Path": "E:\\UE4\\Projects\\Action3D\\Source\\Action3D.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "Action3DEditor",
+			"Path": "E:\\UE4\\Projects\\Action3D\\Source\\Action3DEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}
