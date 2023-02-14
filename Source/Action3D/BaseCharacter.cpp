@@ -13,7 +13,7 @@ ABaseCharacter::ABaseCharacter()
 	/*BaseBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>("BaseBodyMesh");
 	RootComponent = BaseBodyMesh;*/
 
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -26,17 +26,17 @@ ABaseCharacter::ABaseCharacter()
 
 
 	// Создаем копию локтя камеры
-	BaseSpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("BaseCameraBoom");
-	// Крепим локоть камеры к корневому компоненту
-	BaseSpringArmComponent->SetupAttachment(RootComponent);
-	// Задаем длину локтя
-	BaseSpringArmComponent->TargetArmLength = 300.f;
+	BaseCameraBoom = CreateDefaultSubobject<USpringArmComponent>("BaseCameraBoom"); // Создаем копию локтя камеры
+	BaseCameraBoom->SetupAttachment(RootComponent); // Крепим локоть камеры к корневому компоненту
+	BaseCameraBoom->TargetArmLength = 300.f; // Задаем длину локтя
+	BaseCameraBoom->bUsePawnControlRotation = true;
 	
-	BaseSpringArmComponent->bUsePawnControlRotation = true;
-
-	BaseCameraComponent = CreateDefaultSubobject<UCameraComponent>("BaseFollowCamera");
-	BaseCameraComponent->SetupAttachment(BaseSpringArmComponent, USpringArmComponent::SocketName);
-	BaseCameraComponent->bUsePawnControlRotation = false;
+	BaseFollowCamera = CreateDefaultSubobject<UCameraComponent>("BaseFollowCamera");
+	BaseFollowCamera->bUsePawnControlRotation = false;
+	BaseFollowCamera->SetupAttachment(BaseCameraBoom);
+	
+	/*BaseFollowCamera->SetupAttachment(BaseCameraBoom, USpringArmComponent::SocketName);
+	BaseFollowCamera->bUsePawnControlRotation = false;*/
 
 }
 

@@ -30,8 +30,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
+	// ‘ункци€ дл€ прив€зки клавиш управлени€
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	/*virtual void Crouch(bool bClientSimulation = false) override;
+	virtual void UnCrouch(bool bClientSimulation = false) override;
+
+
+	virtual FVector GetPawnViewLocation() const override;
+	virtual UCapsuleComponent* GetCapsuleComponent() const override;*/
 
 	
 	// ќбъ€вл€ем необходимые компоненты...
@@ -42,17 +49,22 @@ public:
 
 	// ...камеру персонажа...
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* BaseCameraComponent;
+	class UCameraComponent* BaseFollowCamera;
 	
 	// ...локоть камеры персонажа...
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* BaseSpringArmComponent;
+	class USpringArmComponent* BaseCameraBoom;
+
+
 
 	// ...прив€зку управлени€ персонажа.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UInputComponent* BaseInputComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Crouch)
+	bool bIsCrouching;
+
 private:
 	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BaseBody", meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* BaseBodyMesh;*/
+	class USkeletalMeshComponent* BaseBodyMesh;*/
 };
