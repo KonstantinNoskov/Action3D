@@ -7,26 +7,19 @@
 #include "Components/InputComponent.h"
 #include "Components/CapsuleComponent.h"
 
+
 // Задаем параметры для базового персонажа
 ABaseCharacter::ABaseCharacter()
 {
-
 	bIsCrouching = false;
-	/*bCanCrouch = true;*/
-
-
-	BaseCapsule = CreateDefaultSubobject<UCapsuleComponent>("BaseCapsule");
-		
-	/*BaseBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>("BaseBodyMesh");
-	RootComponent = BaseBodyMesh;*/
-
+	
 	PrimaryActorTick.bCanEverTick = true;
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	// Будет ли персонаж поворачиваться в направлении взгляда
+	// Будет ли персонаж поворачиваться в направлении движения
 	GetCharacterMovement()->bOrientRotationToMovement = true; 
 	// Задает скорость поворота персонажа по осям Y, Z и X
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); 
@@ -37,17 +30,22 @@ ABaseCharacter::ABaseCharacter()
 
 
 	// Создаем копию локтя камеры
-	BaseSpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("BaseCameraBoom"); 
+	BaseCameraBoom = CreateDefaultSubobject<USpringArmComponent>("BaseCameraBoom"); 
 	// Крепим локоть камеры к корневому компоненту
-	BaseSpringArmComponent->SetupAttachment(RootComponent); 
+	BaseCameraBoom->SetupAttachment(RootComponent); 
 	// Задаем длину локтя
-	BaseSpringArmComponent->TargetArmLength = 300.f; 
-	//
-	BaseSpringArmComponent->bUsePawnControlRotation = true;
+	BaseCameraBoom->TargetArmLength = 300.f; 
+	
+	// Будет ли меш поворачиваться в сторону движения
+	BaseCameraBoom->bUsePawnControlRotation = true;
 
-	BaseCameraComponent = CreateDefaultSubobject<UCameraComponent>("BaseFollowCamera");
-	BaseCameraComponent->SetupAttachment(BaseSpringArmComponent, USpringArmComponent::SocketName);
-	BaseCameraComponent->bUsePawnControlRotation = false;
+	BaseCamera = CreateDefaultSubobject<UCameraComponent>("BaseFollowCamera");
+	BaseCamera->SetupAttachment(BaseCameraBoom, USpringArmComponent::SocketName);
+		
+	CrouchEyeOffset = FVector(0.f);
+	
+	// Отвечает за скорость спуска/поднятия камеры по оси Z при приседании/подъеме
+	CrouchCameraSpeed = 5.f;
 
 }
 
@@ -61,11 +59,15 @@ void ABaseCharacter::BeginPlay()
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	float CrouchInterpTime = FMath::Min(1.f, CrouchCameraSpeed * DeltaTime);
+	CrouchEyeOffset = ((1.f - CrouchInterpTime) * CrouchEyeOffset);
 }
 
-////////////////////////////////////
-///  Binding Control Keys
-////////////////////////////////////
+
+//=========================================
+//             Привязка клавиш
+//=========================================
 
 void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -79,16 +81,21 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ABaseCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ABaseCharacter::StopJumping);
 
-	PlayerInputComponent->BindAction("ToggleCrouch", IE_Pressed, this, &ABaseCharacter::ToggleCrouch);
-	/*PlayerInputComponent->BindAction("ToggleCrouch", IE_Pressed, this, &ABaseCharacter::Crouch);
-	PlayerInputComponent->BindAction("ToggleCrouch", IE_Released, this, &ABaseCharacter::UnCrouch);*/
+
+	 /* Добавлено две имплементации: 
+			1. StartCrouch и EndCrouch на случай, если мы хотим приседать/вставать по удержанию клавиши 
+			2. ToggleCrouch - если хотим переключаться между режимами одним нажатием
+	 */
+
+	//PlayerInputComponent->BindAction("ToggleCrouch", IE_Pressed, this, &ABaseCharacter::StartCrouch);
+	//PlayerInputComponent->BindAction("ToggleCrouch", IE_Released, this, &ABaseCharacter::EndCrouch);
+    PlayerInputComponent->BindAction("ToggleCrouch", IE_Pressed, this, &ABaseCharacter::ToggleCrouch);
 }
 
 
-/////////////////////////////////////
-///  Имлементация движения персонажа
-/////////////////////////////////////
-
+//=========================================
+//  Движение влево/вправо, вперед/назад
+//=========================================
 
 // Движение вперед/назад
 void ABaseCharacter::MoveForward(float AxisValue)
@@ -118,60 +125,75 @@ void ABaseCharacter::MoveRight(float AxisValue)
 	}
 }
 
+
+//=========================================
+//             Приседания
+//=========================================
+
+// Переключает режим присесть/встать 
 void ABaseCharacter::ToggleCrouch()
 {
 	if (bIsCrouching)
-	{
-		UnCrouch();
+	{	
+		EndCrouch();
 	}
-
 	else
-	{
-		Crouch();
+	{	
+		StartCrouch();
 	}
 }
 
-void ABaseCharacter::Crouch(bool bClientSimulation)
-{
+// Тупо вызывает родительскую функцию, чтобы присесть...
+void ABaseCharacter::StartCrouch()
+{	
 	bIsCrouching = true;
-	
-	Super::Crouch();
-	AdjustCapsuleSize(true);
-
-	UE_LOG(LogClass, Warning, TEXT("Is Crouching!"));
+	Crouch();
 }
 
-void ABaseCharacter::UnCrouch(bool bClientSimulation)
-{
+// ... и чтобы встать.
+void ABaseCharacter::EndCrouch()
+{	
 	bIsCrouching = false;
-
-	Super::UnCrouch();
-	AdjustCapsuleSize(false);
-
-	UE_LOG(LogClass, Warning, TEXT("Is Up!"));
+	UnCrouch();
 }
 
 
-void ABaseCharacter::AdjustCapsuleSize(bool bCrouch)
+//==============================================
+//         Плавная камера при приседании
+//==============================================
+
+void ABaseCharacter::OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeighAdjust)
 {
+	if (HalfHeightAdjust == 0.f) { return; }
 
-	if (!BaseCapsule) return;
+	// Сохраняем высоту "глаз" до приседания
+	float StartBaseEyeHeight = BaseEyeHeight;
 
-	FVector CurrentLocation, CurrentScale;
-	FRotator CurrentRotation;
+	Super::OnStartCrouch(HalfHeightAdjust, ScaledHalfHeighAdjust);
 
-	//BaseCapsule->GetAllComponentScale(CurrentLocation, CurrentRotation, CurrentScale);
-	
+	CrouchEyeOffset.Z += StartBaseEyeHeight - BaseEyeHeight + HalfHeightAdjust;
 
-	if (bCrouch)
-	{
-		BaseCapsule->SetCapsuleHalfHeight(70.f);
-		BaseCapsule->SetRelativeLocation(FVector(0.f, 0.f, 70.f));
-	}
-	else
-	{
-		BaseCapsule->SetCapsuleHalfHeight(96.f);
-		BaseCapsule->SetRelativeLocation(FVector(0.f, 0.f, 96.f));
-	}
+	// Регулирует положение камеры после приседания
+	BaseCamera->SetRelativeLocation(FVector(0.f, 0.f, BaseEyeHeight), false);
+
 }
 
+void ABaseCharacter::OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeighAdjust)
+{
+	if (HalfHeightAdjust == 0.f) { return; }
+
+	float StartBaseEyeHeight = BaseEyeHeight;
+	Super::OnEndCrouch(HalfHeightAdjust, ScaledHalfHeighAdjust);
+
+	CrouchEyeOffset.Z += StartBaseEyeHeight - BaseEyeHeight - HalfHeightAdjust;
+	BaseCamera->SetRelativeLocation(FVector(0.f, 0.f, BaseEyeHeight), false);
+}
+
+void ABaseCharacter::CalcCamera(float DeltaTime, struct FMinimalViewInfo& OutResult)
+{
+	if (BaseCamera)
+	{
+		BaseCamera->GetCameraView(DeltaTime, OutResult);
+		OutResult.Location += CrouchEyeOffset;
+	}
+}

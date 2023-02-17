@@ -58,7 +58,18 @@ public: \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(ABaseCharacter)
 
 
-#define Action3D_Source_Action3D_BaseCharacter_h_12_PRIVATE_PROPERTY_OFFSET
+#define Action3D_Source_Action3D_BaseCharacter_h_12_PRIVATE_PROPERTY_OFFSET \
+	FORCEINLINE static uint32 __PPO__BaseMovementComponent() { return STRUCT_OFFSET(ABaseCharacter, BaseMovementComponent); } \
+	FORCEINLINE static uint32 __PPO__BaseCamera() { return STRUCT_OFFSET(ABaseCharacter, BaseCamera); } \
+	FORCEINLINE static uint32 __PPO__BaseCameraBoom() { return STRUCT_OFFSET(ABaseCharacter, BaseCameraBoom); } \
+	FORCEINLINE static uint32 __PPO__BaseInputComponent() { return STRUCT_OFFSET(ABaseCharacter, BaseInputComponent); } \
+	FORCEINLINE static uint32 __PPO__bIsCrouching() { return STRUCT_OFFSET(ABaseCharacter, bIsCrouching); } \
+	FORCEINLINE static uint32 __PPO__CrouchEyeOffset() { return STRUCT_OFFSET(ABaseCharacter, CrouchEyeOffset); } \
+	FORCEINLINE static uint32 __PPO__CrouchCameraSpeed() { return STRUCT_OFFSET(ABaseCharacter, CrouchCameraSpeed); } \
+	FORCEINLINE static uint32 __PPO__bIsSprint() { return STRUCT_OFFSET(ABaseCharacter, bIsSprint); } \
+	FORCEINLINE static uint32 __PPO__SprintSpeed() { return STRUCT_OFFSET(ABaseCharacter, SprintSpeed); }
+
+
 #define Action3D_Source_Action3D_BaseCharacter_h_9_PROLOG
 #define Action3D_Source_Action3D_BaseCharacter_h_12_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
