@@ -1,0 +1,17 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-Action3D-8993.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"E:\UE4\Projects\Action3D\Intermediate\Build\Win64\Action3DEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
+"E:\UE4\Projects\Action3D\Intermediate\Build\Win64\UE4Editor\Development\Action3D\Action3D.cpp.obj"
+"E:\UE4\Projects\Action3D\Intermediate\Build\Win64\UE4Editor\Development\Action3D\Action3DGameModeBase.cpp.obj"
+"E:\UE4\Projects\Action3D\Intermediate\Build\Win64\UE4Editor\Development\Action3D\BaseCharacter.cpp.obj"
+"E:\UE4\Projects\Action3D\Intermediate\Build\Win64\UE4Editor\Development\Action3D\Action3D.init.gen.cpp.obj"
+"E:\UE4\Projects\Action3D\Intermediate\Build\Win64\UE4Editor\Development\Action3D\Action3DGameModeBase.gen.cpp.obj"
+"E:\UE4\Projects\Action3D\Intermediate\Build\Win64\UE4Editor\Development\Action3D\BaseCharacter.gen.cpp.obj"
+"E:\UE4\Projects\Action3D\Intermediate\Build\Win64\UE4Editor\Development\Action3D\Default.rc2.res"
+/OUT:"E:\UE4\Projects\Action3D\Intermediate\Build\Win64\UE4Editor\Development\Action3D\UE4Editor-Action3D-8993.lib"

@@ -58,10 +58,7 @@ public: \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(ABaseCharacter)
 
 
-#define Action3D_Source_Action3D_BaseCharacter_h_12_PRIVATE_PROPERTY_OFFSET \
-	FORCEINLINE static uint32 __PPO__BaseBodyMesh() { return STRUCT_OFFSET(ABaseCharacter, BaseBodyMesh); }
-
-
+#define Action3D_Source_Action3D_BaseCharacter_h_12_PRIVATE_PROPERTY_OFFSET
 #define Action3D_Source_Action3D_BaseCharacter_h_9_PROLOG
 #define Action3D_Source_Action3D_BaseCharacter_h_12_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \

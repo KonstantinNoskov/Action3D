@@ -5,11 +5,18 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/CapsuleComponent.h"
 
 // Задаем параметры для базового персонажа
 ABaseCharacter::ABaseCharacter()
 {
 
+	bIsCrouching = false;
+	/*bCanCrouch = true;*/
+
+
+	BaseCapsule = CreateDefaultSubobject<UCapsuleComponent>("BaseCapsule");
+		
 	/*BaseBodyMesh = CreateDefaultSubobject<USkeletalMeshComponent>("BaseBodyMesh");
 	RootComponent = BaseBodyMesh;*/
 
@@ -19,19 +26,23 @@ ABaseCharacter::ABaseCharacter()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Будет ли персонаж поворачиваться в направлении взгляда
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // задает скорость поворота персонажа по осям Y, Z и X
+	// Будет ли персонаж поворачиваться в направлении взгляда
+	GetCharacterMovement()->bOrientRotationToMovement = true; 
+	// Задает скорость поворота персонажа по осям Y, Z и X
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); 
+	// Задает силу прыжка
 	GetCharacterMovement()->JumpZVelocity = 600.f;
-	GetCharacterMovement()->AirControl = 0.2f; // Коэффицент управляемости персонажа в прыжке/падении
+	// Коэффицент управляемости персонажа в прыжке/падении
+	GetCharacterMovement()->AirControl = 0.2f; 
 
 
 	// Создаем копию локтя камеры
-	BaseSpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("BaseCameraBoom");
+	BaseSpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("BaseCameraBoom"); 
 	// Крепим локоть камеры к корневому компоненту
-	BaseSpringArmComponent->SetupAttachment(RootComponent);
+	BaseSpringArmComponent->SetupAttachment(RootComponent); 
 	// Задаем длину локтя
-	BaseSpringArmComponent->TargetArmLength = 300.f;
-	
+	BaseSpringArmComponent->TargetArmLength = 300.f; 
+	//
 	BaseSpringArmComponent->bUsePawnControlRotation = true;
 
 	BaseCameraComponent = CreateDefaultSubobject<UCameraComponent>("BaseFollowCamera");
@@ -67,11 +78,15 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ABaseCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ABaseCharacter::StopJumping);
+
+	PlayerInputComponent->BindAction("ToggleCrouch", IE_Pressed, this, &ABaseCharacter::ToggleCrouch);
+	/*PlayerInputComponent->BindAction("ToggleCrouch", IE_Pressed, this, &ABaseCharacter::Crouch);
+	PlayerInputComponent->BindAction("ToggleCrouch", IE_Released, this, &ABaseCharacter::UnCrouch);*/
 }
 
 
 /////////////////////////////////////
-///  Base Controller Implementation
+///  Имлементация движения персонажа
 /////////////////////////////////////
 
 
@@ -102,3 +117,61 @@ void ABaseCharacter::MoveRight(float AxisValue)
 		AddMovementInput(Direction, AxisValue);
 	}
 }
+
+void ABaseCharacter::ToggleCrouch()
+{
+	if (bIsCrouching)
+	{
+		UnCrouch();
+	}
+
+	else
+	{
+		Crouch();
+	}
+}
+
+void ABaseCharacter::Crouch(bool bClientSimulation)
+{
+	bIsCrouching = true;
+	
+	Super::Crouch();
+	AdjustCapsuleSize(true);
+
+	UE_LOG(LogClass, Warning, TEXT("Is Crouching!"));
+}
+
+void ABaseCharacter::UnCrouch(bool bClientSimulation)
+{
+	bIsCrouching = false;
+
+	Super::UnCrouch();
+	AdjustCapsuleSize(false);
+
+	UE_LOG(LogClass, Warning, TEXT("Is Up!"));
+}
+
+
+void ABaseCharacter::AdjustCapsuleSize(bool bCrouch)
+{
+
+	if (!BaseCapsule) return;
+
+	FVector CurrentLocation, CurrentScale;
+	FRotator CurrentRotation;
+
+	//BaseCapsule->GetAllComponentScale(CurrentLocation, CurrentRotation, CurrentScale);
+	
+
+	if (bCrouch)
+	{
+		BaseCapsule->SetCapsuleHalfHeight(70.f);
+		BaseCapsule->SetRelativeLocation(FVector(0.f, 0.f, 70.f));
+	}
+	else
+	{
+		BaseCapsule->SetCapsuleHalfHeight(96.f);
+		BaseCapsule->SetRelativeLocation(FVector(0.f, 0.f, 96.f));
+	}
+}
+
