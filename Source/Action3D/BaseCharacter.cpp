@@ -12,6 +12,12 @@
 ABaseCharacter::ABaseCharacter()
 {
 	bIsCrouching = false;
+	bIsSprinting = false;
+
+	CurrentState = CharacterState::Idle;
+
+	BaseWalkSpeed = 500.f;
+	SprintSpeed = 800.f;
 	
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -62,6 +68,17 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 	float CrouchInterpTime = FMath::Min(1.f, CrouchCameraSpeed * DeltaTime);
 	CrouchEyeOffset = ((1.f - CrouchInterpTime) * CrouchEyeOffset);
+
+	switch (CurrentState)
+	{
+
+	case CharacterState::Crouching:
+		Crouch();
+
+		default:
+			break;
+	}
+
 }
 
 
@@ -81,8 +98,11 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ABaseCharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ABaseCharacter::StopJumping);
 
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ABaseCharacter::StartSprinting);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ABaseCharacter::StopSprinting);
 
-	 /* Добавлено две имплементации: 
+
+	 /* Добавил две имплементации: 
 			1. StartCrouch и EndCrouch на случай, если мы хотим приседать/вставать по удержанию клавиши 
 			2. ToggleCrouch - если хотим переключаться между режимами одним нажатием
 	 */
@@ -148,11 +168,14 @@ void ABaseCharacter::StartCrouch()
 {	
 	bIsCrouching = true;
 	Crouch();
+	
+	
 }
 
 // ... и чтобы встать.
 void ABaseCharacter::EndCrouch()
 {	
+
 	bIsCrouching = false;
 	UnCrouch();
 }
@@ -196,4 +219,24 @@ void ABaseCharacter::CalcCamera(float DeltaTime, struct FMinimalViewInfo& OutRes
 		BaseCamera->GetCameraView(DeltaTime, OutResult);
 		OutResult.Location += CrouchEyeOffset;
 	}
+}
+
+
+//==============================================
+//					Спринт
+//==============================================
+
+
+void ABaseCharacter::StartSprinting()
+{	
+	bIsSprinting = true;
+	Sprint();
+	UE_LOG(LogClass, Warning, TEXT("Sprint!"));
+}
+
+void ABaseCharacter::StopSprinting()
+{
+	bIsSprinting = false;
+	StopSprint();
+	UE_LOG(LogClass, Warning, TEXT("Stop Sprint!"));
 }

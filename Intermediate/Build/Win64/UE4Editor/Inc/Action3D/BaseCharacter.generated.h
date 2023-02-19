@@ -13,10 +13,22 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define ACTION3D_BaseCharacter_generated_h
 
-#define Action3D_Source_Action3D_BaseCharacter_h_12_SPARSE_DATA
-#define Action3D_Source_Action3D_BaseCharacter_h_12_RPC_WRAPPERS
-#define Action3D_Source_Action3D_BaseCharacter_h_12_RPC_WRAPPERS_NO_PURE_DECLS
-#define Action3D_Source_Action3D_BaseCharacter_h_12_INCLASS_NO_PURE_DECLS \
+#define Action3D_Source_Action3D_BaseCharacter_h_22_SPARSE_DATA
+#define Action3D_Source_Action3D_BaseCharacter_h_22_RPC_WRAPPERS \
+ \
+	DECLARE_FUNCTION(execEndCrouch); \
+	DECLARE_FUNCTION(execStartCrouch);
+
+
+#define Action3D_Source_Action3D_BaseCharacter_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
+ \
+	DECLARE_FUNCTION(execEndCrouch); \
+	DECLARE_FUNCTION(execStartCrouch);
+
+
+#define Action3D_Source_Action3D_BaseCharacter_h_22_EVENT_PARMS
+#define Action3D_Source_Action3D_BaseCharacter_h_22_CALLBACK_WRAPPERS
+#define Action3D_Source_Action3D_BaseCharacter_h_22_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesABaseCharacter(); \
 	friend struct Z_Construct_UClass_ABaseCharacter_Statics; \
@@ -25,7 +37,7 @@ public: \
 	DECLARE_SERIALIZER(ABaseCharacter)
 
 
-#define Action3D_Source_Action3D_BaseCharacter_h_12_INCLASS \
+#define Action3D_Source_Action3D_BaseCharacter_h_22_INCLASS \
 private: \
 	static void StaticRegisterNativesABaseCharacter(); \
 	friend struct Z_Construct_UClass_ABaseCharacter_Statics; \
@@ -34,7 +46,7 @@ public: \
 	DECLARE_SERIALIZER(ABaseCharacter)
 
 
-#define Action3D_Source_Action3D_BaseCharacter_h_12_STANDARD_CONSTRUCTORS \
+#define Action3D_Source_Action3D_BaseCharacter_h_22_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API ABaseCharacter(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(ABaseCharacter) \
@@ -47,7 +59,7 @@ private: \
 public:
 
 
-#define Action3D_Source_Action3D_BaseCharacter_h_12_ENHANCED_CONSTRUCTORS \
+#define Action3D_Source_Action3D_BaseCharacter_h_22_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API ABaseCharacter(ABaseCharacter&&); \
@@ -58,7 +70,7 @@ public: \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(ABaseCharacter)
 
 
-#define Action3D_Source_Action3D_BaseCharacter_h_12_PRIVATE_PROPERTY_OFFSET \
+#define Action3D_Source_Action3D_BaseCharacter_h_22_PRIVATE_PROPERTY_OFFSET \
 	FORCEINLINE static uint32 __PPO__BaseMovementComponent() { return STRUCT_OFFSET(ABaseCharacter, BaseMovementComponent); } \
 	FORCEINLINE static uint32 __PPO__BaseCamera() { return STRUCT_OFFSET(ABaseCharacter, BaseCamera); } \
 	FORCEINLINE static uint32 __PPO__BaseCameraBoom() { return STRUCT_OFFSET(ABaseCharacter, BaseCameraBoom); } \
@@ -66,31 +78,37 @@ public: \
 	FORCEINLINE static uint32 __PPO__bIsCrouching() { return STRUCT_OFFSET(ABaseCharacter, bIsCrouching); } \
 	FORCEINLINE static uint32 __PPO__CrouchEyeOffset() { return STRUCT_OFFSET(ABaseCharacter, CrouchEyeOffset); } \
 	FORCEINLINE static uint32 __PPO__CrouchCameraSpeed() { return STRUCT_OFFSET(ABaseCharacter, CrouchCameraSpeed); } \
-	FORCEINLINE static uint32 __PPO__bIsSprint() { return STRUCT_OFFSET(ABaseCharacter, bIsSprint); } \
-	FORCEINLINE static uint32 __PPO__SprintSpeed() { return STRUCT_OFFSET(ABaseCharacter, SprintSpeed); }
+	FORCEINLINE static uint32 __PPO__bIsSprinting() { return STRUCT_OFFSET(ABaseCharacter, bIsSprinting); } \
+	FORCEINLINE static uint32 __PPO__SprintSpeed() { return STRUCT_OFFSET(ABaseCharacter, SprintSpeed); } \
+	FORCEINLINE static uint32 __PPO__BaseWalkSpeed() { return STRUCT_OFFSET(ABaseCharacter, BaseWalkSpeed); }
 
 
-#define Action3D_Source_Action3D_BaseCharacter_h_9_PROLOG
-#define Action3D_Source_Action3D_BaseCharacter_h_12_GENERATED_BODY_LEGACY \
+#define Action3D_Source_Action3D_BaseCharacter_h_19_PROLOG \
+	Action3D_Source_Action3D_BaseCharacter_h_22_EVENT_PARMS
+
+
+#define Action3D_Source_Action3D_BaseCharacter_h_22_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	Action3D_Source_Action3D_BaseCharacter_h_12_PRIVATE_PROPERTY_OFFSET \
-	Action3D_Source_Action3D_BaseCharacter_h_12_SPARSE_DATA \
-	Action3D_Source_Action3D_BaseCharacter_h_12_RPC_WRAPPERS \
-	Action3D_Source_Action3D_BaseCharacter_h_12_INCLASS \
-	Action3D_Source_Action3D_BaseCharacter_h_12_STANDARD_CONSTRUCTORS \
+	Action3D_Source_Action3D_BaseCharacter_h_22_PRIVATE_PROPERTY_OFFSET \
+	Action3D_Source_Action3D_BaseCharacter_h_22_SPARSE_DATA \
+	Action3D_Source_Action3D_BaseCharacter_h_22_RPC_WRAPPERS \
+	Action3D_Source_Action3D_BaseCharacter_h_22_CALLBACK_WRAPPERS \
+	Action3D_Source_Action3D_BaseCharacter_h_22_INCLASS \
+	Action3D_Source_Action3D_BaseCharacter_h_22_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define Action3D_Source_Action3D_BaseCharacter_h_12_GENERATED_BODY \
+#define Action3D_Source_Action3D_BaseCharacter_h_22_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	Action3D_Source_Action3D_BaseCharacter_h_12_PRIVATE_PROPERTY_OFFSET \
-	Action3D_Source_Action3D_BaseCharacter_h_12_SPARSE_DATA \
-	Action3D_Source_Action3D_BaseCharacter_h_12_RPC_WRAPPERS_NO_PURE_DECLS \
-	Action3D_Source_Action3D_BaseCharacter_h_12_INCLASS_NO_PURE_DECLS \
-	Action3D_Source_Action3D_BaseCharacter_h_12_ENHANCED_CONSTRUCTORS \
+	Action3D_Source_Action3D_BaseCharacter_h_22_PRIVATE_PROPERTY_OFFSET \
+	Action3D_Source_Action3D_BaseCharacter_h_22_SPARSE_DATA \
+	Action3D_Source_Action3D_BaseCharacter_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
+	Action3D_Source_Action3D_BaseCharacter_h_22_CALLBACK_WRAPPERS \
+	Action3D_Source_Action3D_BaseCharacter_h_22_INCLASS_NO_PURE_DECLS \
+	Action3D_Source_Action3D_BaseCharacter_h_22_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -100,5 +118,14 @@ template<> ACTION3D_API UClass* StaticClass<class ABaseCharacter>();
 #undef CURRENT_FILE_ID
 #define CURRENT_FILE_ID Action3D_Source_Action3D_BaseCharacter_h
 
+
+#define FOREACH_ENUM_CHARACTERSTATE(op) \
+	op(CharacterState::Idle) \
+	op(CharacterState::Walking) \
+	op(CharacterState::Sprint) \
+	op(CharacterState::Crouching) 
+
+enum class CharacterState : uint8;
+template<> ACTION3D_API UEnum* StaticEnum<CharacterState>();
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

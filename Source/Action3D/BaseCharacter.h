@@ -6,6 +6,16 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
+UENUM(BlueprintType)
+enum class CharacterState : uint8
+{
+	Idle,
+	Walking,
+	Sprint,
+	Crouching
+};
+
+
 UCLASS()
 class ABaseCharacter : public ACharacter
 {
@@ -14,24 +24,17 @@ class ABaseCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
-
-	// Движение вперед/назад
-	void MoveForward(float AxisValue);
-
-	// Движение вправо/влево
-	void MoveRight(float AxisValue);
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-		
-	void OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeighAdjust) override;
-	void OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeighAdjust) override;
-
-	void CalcCamera(float DeltaTime, struct FMinimalViewInfo& OutResult) override;
 	
-	void ToggleCrouch();
-	void StartCrouch();
-	void EndCrouch();
+	UFUNCTION(BlueprintImplementableEvent)
+		void Sprint();
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void StopSprint();
+
+	UPROPERTY(BlueprintReadOnly, Category = Character)
+		CharacterState CurrentState;
+	
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -54,7 +57,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UInputComponent* BaseInputComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Crouch)
+	UPROPERTY(BlueprintReadOnly, Category = Crouch)
 		bool bIsCrouching;
 
 	UPROPERTY(BlueprintReadWrite, Category = Crouch)
@@ -63,14 +66,43 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Crouch)
 		float CrouchCameraSpeed;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Sprint)
-		bool bIsSprint;
+	UPROPERTY(BlueprintReadOnly, Category = Sprint)
+		bool bIsSprinting;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Sprint)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sprint)
 		float SprintSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sprint)
+		float BaseWalkSpeed;
+
 	
-		
+					
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+private:
+
+	void ToggleCrouch();
+
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	void StartCrouch();
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	void EndCrouch();
+
+	void StartSprinting();
+	void StopSprinting();
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeighAdjust) override;
+	void OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeighAdjust) override;
+
+	// Движение вперед/назад
+	void MoveForward(float AxisValue);
+
+	// Движение вправо/влево
+	void MoveRight(float AxisValue);
+
+	void CalcCamera(float DeltaTime, struct FMinimalViewInfo& OutResult) override;
 };
