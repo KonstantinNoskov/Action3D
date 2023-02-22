@@ -6,14 +6,11 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
-UENUM(BlueprintType)
-enum class CharacterState : uint8
-{
-	Idle,
-	Walking,
-	Sprint,
-	Crouching
-};
+
+class UCustomMovementComponent;
+class UCameraComponent;
+class USpringArmComponent;
+class UInputComponent;
 
 
 UCLASS()
@@ -23,78 +20,72 @@ class ABaseCharacter : public ACharacter
 
 public:
 	// Sets default values for this character's properties
-	ABaseCharacter();
+	ABaseCharacter(/*const FObjectInitializer& ObjectInitializer*/);
 	
-	UFUNCTION(BlueprintImplementableEvent)
-		void Sprint();
-
-	UFUNCTION(BlueprintImplementableEvent)
-		void StopSprint();
-
-	UPROPERTY(BlueprintReadOnly, Category = Character)
-		CharacterState CurrentState;
-	
-	
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 	// ќбъ€вл€ем необходимые компоненты...
 
 	// ...перемещение персонажа...
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class UCharacterMovementComponent* BaseMovementComponent;
+	UCharacterMovementComponent* BaseMovementComponent;
 
 	// ...камеру персонажа...
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class UCameraComponent* BaseCamera;
+	UCameraComponent* BaseCamera;
 
 	// ...локоть камеры персонажа...
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class USpringArmComponent* BaseCameraBoom;
+	USpringArmComponent* BaseCameraBoom;
+
+	UCustomMovementComponent* CustomMovementComponent;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void Sprint();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void StopSprint();
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement: Crouch")
+	bool bIsCrouching;
+	
+	//CharacterState GetCurrentState();
+		
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	
 
 	// ...прив€зку управлени€ персонажа.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class UInputComponent* BaseInputComponent;
-
-	UPROPERTY(BlueprintReadOnly, Category = Crouch)
-		bool bIsCrouching;
+	UInputComponent* BaseInputComponent;
 
 	UPROPERTY(BlueprintReadWrite, Category = Crouch)
-		FVector CrouchEyeOffset;
+	FVector CrouchEyeOffset;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Crouch)
-		float CrouchCameraSpeed;
+	float CrouchCameraSpeed;
 
 	UPROPERTY(BlueprintReadOnly, Category = Sprint)
-		bool bIsSprinting;
+	bool bIsSprinting;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sprint)
-		float SprintSpeed;
+	float SprintSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sprint)
-		float BaseWalkSpeed;
-
-	
+	float BaseWalkSpeed;
 					
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 private:
-
-	void ToggleCrouch();
-
-	UFUNCTION(BlueprintCallable, Category = "Character")
-	void StartCrouch();
-	UFUNCTION(BlueprintCallable, Category = "Character")
-	void EndCrouch();
-
+	
 	void StartSprinting();
 	void StopSprinting();
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void ToggleCrouch();
 	void OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeighAdjust) override;
 	void OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeighAdjust) override;
 

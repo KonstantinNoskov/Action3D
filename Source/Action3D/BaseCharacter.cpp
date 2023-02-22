@@ -1,21 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BaseCharacter.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "CustomMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/CapsuleComponent.h"
 
-
 // Задаем параметры для базового персонажа
-ABaseCharacter::ABaseCharacter()
-{
-	bIsCrouching = false;
+ABaseCharacter::ABaseCharacter(/*const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UCustomMovementComponent>
+		(ACharacter::CharacterMovementComponentName)*/)
+{	
+	UCustomMovementComponent->bIsCrouching = false;
 	bIsSprinting = false;
-
-	CurrentState = CharacterState::Idle;
-
+	
 	BaseWalkSpeed = 500.f;
 	SprintSpeed = 800.f;
 	
@@ -24,6 +23,7 @@ ABaseCharacter::ABaseCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
+
 
 	// Будет ли персонаж поворачиваться в направлении движения
 	GetCharacterMovement()->bOrientRotationToMovement = true; 
@@ -68,17 +68,7 @@ void ABaseCharacter::Tick(float DeltaTime)
 
 	float CrouchInterpTime = FMath::Min(1.f, CrouchCameraSpeed * DeltaTime);
 	CrouchEyeOffset = ((1.f - CrouchInterpTime) * CrouchEyeOffset);
-
-	switch (CurrentState)
-	{
-
-	case CharacterState::Crouching:
-		Crouch();
-
-		default:
-			break;
-	}
-
+		
 }
 
 
@@ -100,7 +90,6 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ABaseCharacter::StartSprinting);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ABaseCharacter::StopSprinting);
-
 
 	 /* Добавил две имплементации: 
 			1. StartCrouch и EndCrouch на случай, если мы хотим приседать/вставать по удержанию клавиши 
@@ -145,40 +134,21 @@ void ABaseCharacter::MoveRight(float AxisValue)
 	}
 }
 
-
-//=========================================
-//             Приседания
-//=========================================
-
 // Переключает режим присесть/встать 
 void ABaseCharacter::ToggleCrouch()
 {
 	if (bIsCrouching)
 	{	
-		EndCrouch();
+		bIsCrouching = false;
+		UnCrouch();
 	}
 	else
 	{	
-		StartCrouch();
+		bIsCrouching = true;
+		Crouch();
 	}
 }
 
-// Тупо вызывает родительскую функцию, чтобы присесть...
-void ABaseCharacter::StartCrouch()
-{	
-	bIsCrouching = true;
-	Crouch();
-	
-	
-}
-
-// ... и чтобы встать.
-void ABaseCharacter::EndCrouch()
-{	
-
-	bIsCrouching = false;
-	UnCrouch();
-}
 
 
 //==============================================

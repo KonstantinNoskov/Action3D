@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\Action3D.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{4EFBAA6F-F694-4331-B46D-3CEA9594C21C}</UniqueIdentifier>
+      <UniqueIdentifier>{FAF2B6F7-6ED3-480B-A90E-273C1CC9398F}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\Action3D.Target.cs">
       <Filter>Source</Filter>
@@ -11,10 +11,15 @@
     <None Include="..\..\Source\Action3DEditor.Target.cs">
       <Filter>Source</Filter>
     </None>
+    <None Include="..\..\.gitattributes" />
+    <None Include="..\..\.gitignore" />
     <Filter Include="Config">
-      <UniqueIdentifier>{F919A15F-0A81-4C8A-BA8C-C209C202D624}</UniqueIdentifier>
+      <UniqueIdentifier>{99C5F97C-C971-4C32-9ABC-B13CBF09E052}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
       <Filter>Config</Filter>
     </None>
     <None Include="..\..\Config\DefaultEngine.ini">
@@ -23,8 +28,11 @@
     <None Include="..\..\Config\DefaultGame.ini">
       <Filter>Config</Filter>
     </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
     <Filter Include="Source\Action3D">
-      <UniqueIdentifier>{E75F8BA4-3E27-450F-8720-37A060974D38}</UniqueIdentifier>
+      <UniqueIdentifier>{A85A13D4-7BDF-4EF6-8CCF-36C38BFDA7F5}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\Action3D\Action3D.Build.cs">
       <Filter>Source\Action3D</Filter>
@@ -47,10 +55,10 @@
     <ClInclude Include="..\..\Source\Action3D\BaseCharacter.h">
       <Filter>Source\Action3D</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\Source\Action3D\PlayerCharacter.cpp">
+    <ClCompile Include="..\..\Source\Action3D\CustomMovementComponent.cpp">
       <Filter>Source\Action3D</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\Source\Action3D\PlayerCharacter.h">
+    <ClInclude Include="..\..\Source\Action3D\CustomMovementComponent.h">
       <Filter>Source\Action3D</Filter>
     </ClInclude>
   </ItemGroup>
